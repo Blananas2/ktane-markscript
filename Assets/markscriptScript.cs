@@ -736,6 +736,8 @@ public class markscriptScript : MonoBehaviour {
                         break;
                     case "power":
                         Power.OnInteract();
+                        yield return "solve";
+                        yield return "strike";
                         break;
                     case "space":
                         Keyboard[52].OnInteract();
