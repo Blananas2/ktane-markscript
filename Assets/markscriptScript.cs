@@ -141,15 +141,15 @@ public class markscriptScript : MonoBehaviour {
         List<int> unk = new List<int> {};
         switch (PuzzleIndex) {
              case 0: unk.AddRange(new List<int> {Rnd.Range(3,8), Rnd.Range(3,8)}); CorrectAnswer = unk[0] * unk[1]; break;
-             case 1: unk.Add(Rnd.Range(2,5)*5 + (Rnd.Range(0,2) == 0 ? 0 : Rnd.Range(1,5))); CorrectAnswer = (unk[0] % 5 == 0 ? 1 : 0); break;
+             case 1: unk.Add(Rnd.Range(2,5)*5 + (Rnd.Range(0,2) == 0 ? 0 : Rnd.Range(1,5))); CorrectAnswer = unk[0] % 5 == 0 ? 1 : 0; break;
              case 2: unk.AddRange(new List<int> {Rnd.Range(6,13), Rnd.Range(6,13)}); CorrectAnswer = Math.Abs(unk[0] - unk[1]); break;
              case 3: unk.Add(Rnd.Range(-11,11)); CorrectAnswer = -unk[0]; break;
              case 4: unk.Add(Rnd.Range(4,14)); CorrectAnswer = ComplicatedScenario(PuzzleIndex, unk); break;
              case 5: unk.Add(Rnd.Range(5,13)); CorrectAnswer = ComplicatedScenario(PuzzleIndex, unk); break;
-             case 6: unk.AddRange(new List<int> {Rnd.Range(10,30), Rnd.Range(3,9)}); CorrectAnswer = (unk[0] % unk[1]); break;
+             case 6: unk.AddRange(new List<int> {Rnd.Range(10,30), Rnd.Range(3,9)}); CorrectAnswer = unk[0] % unk[1]; break;
              case 7: unk.Add(Rnd.Range(5,13)); unk.Add(unk[0]+2*Rnd.Range(2,7)); CorrectAnswer = (unk[0] + unk[1])/2; break;
              case 8: unk.Add(Rnd.Range(5,13)); unk.Add(unk[0]+Rnd.Range(2,5)); CorrectAnswer = 2*unk[0] - unk[1]; break;
-             case 9: unk.Add(Rnd.Range(5,27)); CorrectAnswer = (unk[0]%2 == 0 ? unk[0]/2 : unk[0]*3+1); break;
+             case 9: unk.Add(Rnd.Range(5,27)); CorrectAnswer = unk[0]%2 == 0 ? unk[0]/2 : unk[0]*3+1; break;
             case 10: unk.Add(Rnd.Range(11,30)); CorrectAnswer = ((unk[0]-1)%9)+1; break;
             case 11: unk.Add(Rnd.Range(2,14)); CorrectAnswer = unk[0]*unk[0]; break;
             case 12: unk.AddRange(Enumerable.Range(1, 4)); unk.Shuffle(); CorrectAnswer = unk[3]; unk.Remove(unk[3]); break;
@@ -158,7 +158,7 @@ public class markscriptScript : MonoBehaviour {
             case 15: unk.Add(Rnd.Range(3,21)); unk.Add(Rnd.Range(3,21)); CorrectAnswer = ComplicatedScenario(PuzzleIndex, unk); break;
             case 16: unk.Add(Rnd.Range(0,16)); CorrectAnswer = ComplicatedScenario(PuzzleIndex, unk); break;
             case 17: unk.Add(Rnd.Range(3,10)); CorrectAnswer = ComplicatedScenario(PuzzleIndex, unk); break;
-            case 18: unk.Add(Rnd.Range(3,12)); unk.Add(2*(Rnd.Range(1,6)) + (unk[0]%2 == 0 ? 1 : 0)); CorrectAnswer = (unk[0]*unk[1])/2; break;
+            case 18: unk.Add(Rnd.Range(3,12)); unk.Add(2*Rnd.Range(1,6) + (unk[0]%2 == 0 ? 1 : 0)); CorrectAnswer = unk[0]*unk[1]/2; break;
             case 19: unk.Add(Rnd.Range(3,10)*2+1); unk.Add(Rnd.Range(13,20)*2+1); CorrectAnswer = ComplicatedScenario(PuzzleIndex, unk); break;
             case 20: unk.Add(Rnd.Range(1,11)); CorrectAnswer = ComplicatedScenario(PuzzleIndex, unk); break;
           //case -1: unk.Add(Rnd.Range(11,30)); CorrectAnswer = (unk[0]/3)-(unk[0]%3 == 1 ? 1 : 0); break;
@@ -253,7 +253,7 @@ public class markscriptScript : MonoBehaviour {
                     ScreenScroll = 0;
                     Line.transform.localPosition = new Vector3(0f, 0.0149f, 0.0343f + (CurrentLine*-0.0132f));
                 } else if (Program.Count <= 7 || CurrentLine > Program.Count - 3) {
-                    ScreenScroll = (Program.Count <= 7 ? 0 : Program.Count - 6);
+                    ScreenScroll = Program.Count <= 7 ? 0 : Program.Count - 6;
                     Line.transform.localPosition = new Vector3(0f, 0.0149f, 0.0343f + ((Program.Count <= 7 ? CurrentLine : (6-(Program.Count-CurrentLine)))*-0.0132f));
                 } else {
                     ScreenScroll = CurrentLine - 3;
@@ -305,7 +305,7 @@ public class markscriptScript : MonoBehaviour {
                         VarNames.Add(name);
                         VarValues.Add(numeric);
                         CurrentLine += 1;
-                        DebugLog += ("√ Made " + name + " which equals " + Clubify(numeric) + ";");
+                        DebugLog += "√ Made " + name + " which equals " + Clubify(numeric) + ";";
                         return;
                     case 1: 
                         name = split[0].Substring(0, split[0].Length-1);
@@ -326,7 +326,7 @@ public class markscriptScript : MonoBehaviour {
                         }
                         VarValues[VarNames.IndexOf(name)] = numeric;
                         CurrentLine += 1;
-                        DebugLog += ("√ " + name + " now equals " + Clubify(numeric) + ";");
+                        DebugLog += "√ " + name + " now equals " + Clubify(numeric) + ";";
                         return;
                     case 2: 
                         name = split[0].Substring(1, split[0].Length-1);
@@ -348,10 +348,10 @@ public class markscriptScript : MonoBehaviour {
                             }
                             if (VarValues[VarNames.IndexOf(name)] > numeric) {
                                 CurrentLine += 2;
-                                DebugLog += ("◊♣∩ " + name + " is greater than " + Clubify(numeric) + ", skipping a line;");
+                                DebugLog += "◊♣∩ " + name + " is greater than " + Clubify(numeric) + ", skipping a line;";
                             } else {
                                 CurrentLine += 1;
-                                DebugLog += ("◊♣∩ " + name + " is not greater than " + Clubify(numeric) + ";");
+                                DebugLog += "◊♣∩ " + name + " is not greater than " + Clubify(numeric) + ";";
                             }
                             return;
                         } else if (split[1][0] == '∩' && split[1][1] == '∩') { //EQUAL TO
@@ -368,10 +368,10 @@ public class markscriptScript : MonoBehaviour {
                             }
                             if (VarValues[VarNames.IndexOf(name)] == numeric) {
                                 CurrentLine += 2;
-                                DebugLog += ("◊∩∩ " + name + " is equal to " + Clubify(numeric) + ", skipping a line;");
+                                DebugLog += "◊∩∩ " + name + " is equal to " + Clubify(numeric) + ", skipping a line;";
                             } else {
                                 CurrentLine += 1;
-                                DebugLog += ("◊∩∩ " + name + " is not equal to " + Clubify(numeric) + ";");
+                                DebugLog += "◊∩∩ " + name + " is not equal to " + Clubify(numeric) + ";";
                             }
                             return;
                         } else { //LESS THAN
@@ -388,10 +388,10 @@ public class markscriptScript : MonoBehaviour {
                             }
                             if (VarValues[VarNames.IndexOf(name)] < numeric) {
                                 CurrentLine += 2;
-                                DebugLog += ("◊∩ " + name + " is less than " + Clubify(numeric) + ", skipping a line;");
+                                DebugLog += "◊∩ " + name + " is less than " + Clubify(numeric) + ", skipping a line;";
                             } else {
                                 CurrentLine += 1;
-                                DebugLog += ("◊∩ " + name + " is not less than " + Clubify(numeric) + ";");
+                                DebugLog += "◊∩ " + name + " is not less than " + Clubify(numeric) + ";";
                             }
                         }
                         return;
@@ -402,7 +402,7 @@ public class markscriptScript : MonoBehaviour {
                             return;
                         }
                         CurrentLine = ProgramComments.IndexOf(name);
-                        DebugLog += ("₪ " + name + " jump;");
+                        DebugLog += "₪ " + name + " jump;";
                         return;
                     case 4: 
                         name = split[0].Substring(1, split[0].Length-1);
@@ -423,7 +423,7 @@ public class markscriptScript : MonoBehaviour {
                         }
                         VarValues[VarNames.IndexOf(name)] += numeric;
                         CurrentLine += 1;
-                        DebugLog += ("☼ " + name + " now equals " + Clubify(VarValues[VarNames.IndexOf(name)]) + ";");
+                        DebugLog += "☼ " + name + " now equals " + Clubify(VarValues[VarNames.IndexOf(name)]) + ";";
                         return;
                     case 5:
                         value = split[0].Substring(1, split[0].Length-1);
@@ -437,7 +437,7 @@ public class markscriptScript : MonoBehaviour {
                                 numeric = VarValues[VarNames.IndexOf(value)];
                             }
                         }
-                        DebugLog += ("♫ " + Clubify(numeric) + " returned");
+                        DebugLog += "♫ " + Clubify(numeric) + " returned";
                         if (numeric == CorrectAnswer) {
                             ThatWasRight();
                         } else {
@@ -536,7 +536,7 @@ public class markscriptScript : MonoBehaviour {
                         }
                     break;
                     case "←":
-                        if (Program[CursorIndex].Length == 0) { // && DOWN THERE MAYBE???
+                        if (Program[CursorIndex].Length == 0) { // && DOWN THERE MAYBE??
                             if (CursorIndex == 0) { return; }
                             Program.RemoveAt(CursorIndex);
                             CursorIndex -= 1;
@@ -570,13 +570,14 @@ public class markscriptScript : MonoBehaviour {
         if (!TaskShown) {
             string progString = "";
             for (int d = 0; d < 7; d++) {
+                bool lineIsNotTooLong = c >= Program.Count || Program[c].Length != 24; //fixes IndexOutOfRange when spamming run with a 1-line program. I have Faith to blame
                 if (Program.Count <= d+s) {
-                    progString += ((d+s == c && Program[c].Length != 24 && !ProgramRunning) ? "§\n" : "\n");
+                    progString += (d+s == c && lineIsNotTooLong && !ProgramRunning) ? "§\n" : "\n";
                 } else {
-                    progString += (Program[d+s] + ((d+s == c && Program[c].Length != 24 && !ProgramRunning) ? "§\n" : "\n"));
+                    progString += Program[d+s] + ((d+s == c && lineIsNotTooLong && !ProgramRunning) ? "§\n" : "\n");
                 }
             }
-            Screen.text = Style(progString.Replace("§", (CursorFlicker ? "■" : "□")));
+            Screen.text = Style(progString.Replace("§", CursorFlicker ? "■" : "□"));
         } else {
             Screen.text = Style(WordWrap(Task, 24));
         }
